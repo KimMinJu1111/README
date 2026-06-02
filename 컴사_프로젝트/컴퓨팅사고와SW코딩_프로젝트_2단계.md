@@ -1,0 +1,120 @@
+# [프로젝트 2단계 : 기획 및 설계] - 통계학과 김민주(25)
+## 1. 기능 목록 만들기
+
+### **MUST**
+
+① **사용자의 건강 수치 입력받기**  (키, 몸무게, 수축기 혈압, 이완기 혈압, 공복혈당)
+
+② **BMI 계산하기**  ( `계산식: 몸무게(kg) / 키(m)^2` )
+
+③ **사용자의 건강 수치 정상 여부 판별하기**  
+- BMI, 혈압, 공복혈당을 기준 범위와 비교
+- 판정 결과: 낮음, 정상, 주의, 위험
+
+④ **사용자의 건강 수치 판별 결과 출력하기**
+
+⑤ **공공데이터를 활용하여 사용자와 같은 성별, 연령대 집단과 평균 건강 수치 비교하기**  
+
+⑥ **사용자의 분포 위치를 그래프로 보여주기**
+
+⑦ **GUI로 주요 기능 버튼 보여주기**  
+- `사용자의 건강상태 판별` 버튼
+- `같은 성별·연령대와 비교` 버튼
+
+### **NICE**
+
+① **전체 입력 결과를 파일에 저장하기**
+
+② **저장된 파일에서 이전 입력 기록 불러오기**
+
+### **LATER**
+
+① **GUI 화면 디자인 개선하기**
+
+② **더 많은 건강 항목 추가하기**
+
+③ **그래프 디자인 개선하기**
+
+
+
+## 2. 데이터 설계 - 어떤모양으로 저장할까?
+### 1. 사용자의 입력 값 - 딕셔너리
+```python
+user_data = {'gender':gender, 'age':age, 'height':height, 'weight':weight, 'bp_systolic':bp_systolic, 'bp_diastolic':bp_diastolic, 'glucose':glucose}
+```
+
+### 2. 건강상태 판정 결과 - 딕셔너리
+```python
+result_data = {'bmi_result':bmi_result, 'bp_result':bp_result, 'glucose_result':glucose_result}
+```
+
+### 3. 공공데이터 자료에서 개인의 상태는 딕셔너리, 전체는 리스트로 저장
+```python
+health_data = [{'gender':gender, 'age':age, 'height':height, 'weight':weight, 'bp_systolic':bp_systolic, 'bp_diastolic':bp_diastolic, 'glucose':glucose}, {'gender':gender, 'age':age, 'height':height, 'weight':weight, 'bp_systolic':bp_systolic, 'bp_diastolic':bp_diastolic, 'glucose':glucose}]
+```
+
+### 4. 전체 데이터 중 사용자와 성별, 연령대가 같은 데이터 - 리스트 컴프리헨션
+```python
+filtered_data = [data for data in health_data if data['gender']==user_data['gender'] and data['age_group']==calculated_data['age_group']]
+```
+
+### 5. 화면에 출력할 문장 저장 - 딕셔너리
+```python
+result_text = {'bmi_text':bmi_text, 'bp_text':bp_text, 'glucoes_text', }
+```
+
+## 3. 함수 설계
+### 1) 사용자의 키와 몸무게 입력받은 후 BMI 계산
+```python
+def calculate_bmi(height, weight):
+    # cm로 입력받은 키를 m로 변환
+    # bmi 계산
+    # 계산한 bmi 반환
+```
+
+### 2) 계산된 BMI를 기준에 따라 저체중, 정상, 과체중, 비만으로 분류
+```python
+def classify_bmi(bmi):
+    # bmi가 18.5 미만이면 '저체중'
+    # bmi가 23 미만이면 '정상'
+    # bmi가 25 미만이면 '과체중'
+    # 그 외 '비만'
+    # bmi 결과 반환
+```
+
+### 3) 수축기 혈압, 이완기 혈압을 입력받은 후 기준에 따라 저혈압, 정상, 고혈압전단계, 고혈압으로 분류
+```python
+def classify_bp(bp_systolic, bp_diastolic):
+    # 수축기 혈압이 140 이상이거나, 이완기 혈압이 90 이상이면 '고혈압'
+    # 수축기혈압이 90 미만이거나, 이완기 혈압이 60 미만이면 '저혈압'
+    # 수축기 혈압이 120 미만이고, 이완기 혈압이 80 미만이면 '정상'
+    # 그 외 '고혈압 전 단계'
+    # 혈압 결과 반환
+```
+
+### 4) 공복혈당 입력받은 후 기준에 따라 정상, 공복혈당장애, 당뇨병으로 분류
+```python
+def classify_glucose(glucose):
+    # 공복혈당이 100 미만이면 '정상'
+    # 공복혈당이 126 미만이면 '공복혈당장애'
+    # 공복혈당이 126 이상이면 '당뇨병'
+    # 혈당 결과 반환
+
+```
+
+### 5) 같은 성별, 연령대의 집단의 평균과 사용자의 건강 상태 비교
+```python
+def compare(user_data, bmi, filtered_data):
+    # filtered_data에서 bmi 평균 계산
+    # filtered_data에서 수축기혈압 평균 계산
+    # filtered_data에서 이완기혈압 평균 계산
+    # filtered_data에서 공복혈당 평균 계산
+
+    # 집단의 평균 bmi와 사용자의 bmi 비교한 후 결과 반환
+    # 집단의 평균 수축기혈압과 사용자의 수축기혈압 비교한 후 결과 반환
+    # 집단의 평균 이완기혈압과 사용자의 이완기혈압 비교한 후 결과 반환
+    # 집단의 평균 공복혈당과 사용자의 공복혈당 비교한 후 결과 반환
+```
+
+## 4. 화면 흐름 설계
+![화면 흐름 스케치](screen_flow_sketch.jpg)
